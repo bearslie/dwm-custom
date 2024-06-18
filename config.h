@@ -23,8 +23,8 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-/*󱍢󰐔󱄫󰙀󰃖󰚌*/
-static const char *tags[] = { "", "", "" };
+/*󱍢󰐔󱄫󰙀󰃖󰚌󱉟󰣨󰮣󰘧󰷠󰅩󰳶󱐍󰚀󰣙*/
+static const char *tags[] = { "", "", "" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -68,11 +68,15 @@ static const Layout layouts[] = {
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
+#include <X11/XF86keysym.h>
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *emacsclientcmd[] = { "sh", "-c", "emacsclient --socket-name='/tmp/emacs1000/server' -c", NULL };
+static const char *upvol[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+1%", NULL };
+static const char *downvol[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-1%", NULL };
+static const char *mutevol[] = { "pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -112,7 +116,10 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-  { MODKEY|ShiftMask,             XK_e,      spawn,          {.v = emacsclientcmd } },
+	{ MODKEY|ShiftMask,             XK_e,      spawn,          {.v = emacsclientcmd } },
+    { 0,                            XF86XK_AudioRaiseVolume, spawn, {.v = upvol } },
+    { 0,                            XF86XK_AudioLowerVolume, spawn, {.v = downvol } },
+    { 0,                            XF86XK_AudioMute, spawn, {.v = mutevol } },
 };
 
 /* button definitions */
